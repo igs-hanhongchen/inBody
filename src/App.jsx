@@ -304,7 +304,7 @@ const App = () => {
               <div key={m.key} className="flex flex-col space-y-1">
                 <label className="text-xs font-semibold text-slate-500">{m.label.split(' ')[0]}</label>
                 <input 
-                  type="number" step="0.01" name={m.key} value={formData[m.key]} onChange={handleInputChange}
+                  type="number" step="0.01" inputMode="decimal" name={m.key} value={formData[m.key]} onChange={handleInputChange}
                   placeholder={m.placeholder} className="p-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
