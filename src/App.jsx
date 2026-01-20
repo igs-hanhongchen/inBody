@@ -14,7 +14,13 @@ const App = () => {
   
   // 表單狀態
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split('T')[0].replace(/-/g, '/').slice(2),
+    date: (() => {
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(2);
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      return `${yy}/${mm}/${dd}`;
+    })(),
     weight: '',
     bmi: '',
     fat: '',
@@ -378,7 +384,8 @@ const App = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
-          數據來源：Google Sheets
+          <div>數據來源：Google Sheets</div>
+          <div className="mt-1">最後更新：2026/01/20 09:42</div>
         </div>
       </div>
     </div>
