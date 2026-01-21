@@ -248,6 +248,7 @@ const App = () => {
                         src={currentUser.imageUrl} 
                         alt={currentUser.name}
                         className="w-6 h-6 rounded-full"
+                        referrerPolicy="no-referrer"
                       />
                       <span className="text-sm text-slate-700 hidden md:inline">{currentUser.name}</span>
                     </div>
@@ -389,7 +390,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/21 09:03</div>
+          <div className="mt-1">最後更新：2026/01/21 09:29</div>
         </div>
       </div>
     </div>
