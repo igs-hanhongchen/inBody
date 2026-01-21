@@ -2,7 +2,7 @@
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
 const SHEETS_RANGE = import.meta.env.VITE_SHEETS_RANGE;
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets openid profile';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
 let tokenClient = null;
 let accessToken = null;

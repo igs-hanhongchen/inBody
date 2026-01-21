@@ -242,23 +242,6 @@ const App = () => {
             {isGapiReady && (
               isUserSignedIn ? (
                 <div className="flex items-center gap-2">
-                  {currentUser && (
-                    <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm">
-                      {currentUser.imageUrl ? (
-                        <img 
-                          src={currentUser.imageUrl} 
-                          alt={currentUser.name}
-                          className="w-6 h-6 rounded-full"
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
-                          {currentUser.name?.charAt(0) || '?'}
-                        </div>
-                      )}
-                      <span className="text-sm text-slate-700 hidden md:inline">{currentUser.name}</span>
-                    </div>
-                  )}
                   <button
                     onClick={loadData}
                     disabled={isLoading}
@@ -396,7 +379,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/21 09:47</div>
+          <div className="mt-1">最後更新：2026/01/21 09:51</div>
         </div>
       </div>
     </div>
