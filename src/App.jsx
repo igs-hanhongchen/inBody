@@ -24,8 +24,9 @@ const App = () => {
     weight: '',
     bmi: '',
     fat: '',
-    visceral: '',
+    muscle: '',
     bone: '',
+    visceral: '',
     calories: '',
     age: ''
   });
@@ -35,10 +36,11 @@ const App = () => {
     { key: 'weight', label: '體重 (kg)', color: '#3b82f6', icon: User, placeholder: '65.0' },
     { key: 'bmi', label: 'BMI 指數', color: '#6366f1', icon: Activity, placeholder: '21.0' },
     { key: 'fat', label: '體脂 (%)', color: '#f59e0b', icon: Info, placeholder: '17.0' },
-    { key: 'visceral', label: '內臟脂肪', color: '#ef4444', icon: Heart, placeholder: '60' },
-    { key: 'bone', label: '推定骨量 (kg)', color: '#8b5cf6', icon: Database, placeholder: '55' },
+    { key: 'muscle', label: '肌肉量 (kg)', color: '#ec4899', icon: Activity, placeholder: '50.0' },
+    { key: 'bone', label: '推定骨量 (kg)', color: '#8b5cf6', icon: Database, placeholder: '2.8' },
+    { key: 'visceral', label: '內臟脂肪', color: '#ef4444', icon: Heart, placeholder: '5' },
     { key: 'calories', label: '基礎代謝 (kcal)', color: '#10b981', icon: Flame, placeholder: '1500' },
-    { key: 'age', label: '推定年齡', color: '#64748b', icon: Clock, placeholder: '35' },
+    { key: 'age', label: '體內年齡', color: '#64748b', icon: Clock, placeholder: '35' },
   ];
 
   // 初始化 Google API
@@ -83,8 +85,9 @@ const App = () => {
           weight: lastRecord.weight?.toString() || '',
           bmi: lastRecord.bmi?.toString() || '',
           fat: lastRecord.fat?.toString() || '',
-          visceral: lastRecord.visceral?.toString() || '',
+          muscle: lastRecord.muscle?.toString() || '',
           bone: lastRecord.bone?.toString() || '',
+          visceral: lastRecord.visceral?.toString() || '',
           calories: lastRecord.calories?.toString() || '',
           age: lastRecord.age?.toString() || ''
         }));
@@ -137,8 +140,9 @@ const App = () => {
       weight: parseFloat(formData.weight) || 0,
       bmi: parseFloat(formData.bmi) || 0,
       fat: parseFloat(formData.fat) || 0,
-      visceral: parseFloat(formData.visceral) || 0,
+      muscle: parseFloat(formData.muscle) || 0,
       bone: parseFloat(formData.bone) || 0,
+      visceral: parseFloat(formData.visceral) || 0,
       calories: parseFloat(formData.calories) || 0,
       age: parseInt(formData.age) || 0
     };
@@ -385,7 +389,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/20 09:42</div>
+          <div className="mt-1">最後更新：2026/01/21 09:03</div>
         </div>
       </div>
     </div>

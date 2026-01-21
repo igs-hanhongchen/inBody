@@ -161,15 +161,17 @@ export const readSheetData = async () => {
     const dataRows = values.slice(1);
     
     // 將數據轉換為物件格式
+    // 欄位順序：日期, 體重, BMI, 體脂, 肌肉量, 推定骨量, 內臟脂肪, 基礎代謝, 體內年齡
     const records = dataRows.map((row) => ({
       date: row[0] || '',
       weight: parseFloat(row[1]) || 0,
       bmi: parseFloat(row[2]) || 0,
       fat: parseFloat(row[3]) || 0,
-      visceral: parseFloat(row[4]) || 0,
+      muscle: parseFloat(row[4]) || 0,
       bone: parseFloat(row[5]) || 0,
-      calories: parseFloat(row[6]) || 0,
-      age: parseInt(row[7]) || 0,
+      visceral: parseFloat(row[6]) || 0,
+      calories: parseFloat(row[7]) || 0,
+      age: parseInt(row[8]) || 0,
     }));
     
     return records;
@@ -180,6 +182,7 @@ export const readSheetData = async () => {
 };
 
 // 寫入新記錄到 Google Sheets
+// 欄位順序：日期, 體重, BMI, 體脂, 肌肉量, 推定骨量, 內臟脂肪, 基礎代謝, 體內年齡
 export const appendSheetData = async (record) => {
   try {
     const values = [[
@@ -187,8 +190,9 @@ export const appendSheetData = async (record) => {
       record.weight,
       record.bmi,
       record.fat,
-      record.visceral,
+      record.muscle,
       record.bone,
+      record.visceral,
       record.calories,
       record.age,
     ]];
