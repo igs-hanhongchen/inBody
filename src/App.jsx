@@ -379,7 +379,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/21 09:51</div>
+          <div className="mt-1">最後更新：2026/01/27 17:15</div>
         </div>
       </div>
     </div>
