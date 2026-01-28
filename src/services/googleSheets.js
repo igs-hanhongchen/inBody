@@ -4,8 +4,8 @@ const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
 const SHEETS_RANGE = import.meta.env.VITE_SHEETS_RANGE;
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
-// Token 有效期（Google 預設 1 小時 = 3600 秒，設置為 55 分鐘提前刷新）
-const TOKEN_EXPIRY_BUFFER = 55 * 60 * 1000; // 55 分鐘（毫秒）
+// Token 有效期緩衝時間（提前 5 分鐘刷新）
+const TOKEN_EXPIRY_BUFFER = 5 * 60 * 1000; // 5 分鐘（毫秒）
 
 let tokenClient = null;
 let accessToken = null;
@@ -61,12 +61,14 @@ const isTokenExpired = () => {
 };
 
 // 儲存 token 到 localStorage
-const saveTokenToStorage = (token) => {
-  const expiryTime = Date.now() + TOKEN_EXPIRY_BUFFER;
+const saveTokenToStorage = (token, expiresIn = 3600) => {
+  // expiresIn 是秒數，轉換為毫秒並減去緩衝時間
+  const expiryTime = Date.now() + (expiresIn * 1000) - TOKEN_EXPIRY_BUFFER;
   localStorage.setItem('gapi_access_token', token);
   localStorage.setItem('gapi_token_expiry', expiryTime.toString());
   accessToken = token;
   tokenExpiryTime = expiryTime;
+  console.log(`Token saved, expires in ${expiresIn} seconds (will refresh at ${new Date(expiryTime).toLocaleString()})`);
 };
 
 // 從 localStorage 載入 token
@@ -97,12 +99,28 @@ const clearTokenFromStorage = () => {
 export const initGoogleAPI = async () => {
   try {
     await Promise.all([loadGapiClient(), loadGisClient()]);
-    
+
     // 嘗試從 localStorage 恢復 token
-    if (loadTokenFromStorage()) {
-      window.gapi.client.setToken({ access_token: accessToken });
+    const hasStoredToken = loadTokenFromStorage();
+
+    if (hasStoredToken) {
+      // 如果 token 還沒過期，直接使用
+      if (!isTokenExpired()) {
+        window.gapi.client.setToken({ access_token: accessToken });
+        console.log('Restored valid token from localStorage');
+      } else {
+        // Token 已過期，嘗試靜默刷新
+        console.log('Token expired, attempting silent refresh...');
+        const refreshed = await silentRefreshToken();
+        if (!refreshed) {
+          console.log('Silent refresh failed, user needs to login again');
+          clearTokenFromStorage();
+        }
+      }
+    } else {
+      console.log('No stored token found');
     }
-    
+
     return true;
   } catch (error) {
     console.error('Error initializing Google API:', error);
@@ -122,20 +140,22 @@ const silentRefreshToken = () => {
       resolve(false);
       return;
     }
-    
+
     tokenClient.callback = (response) => {
       if (response.error) {
         console.log('Silent refresh failed:', response.error);
         resolve(false);
         return;
       }
-      
-      saveTokenToStorage(response.access_token);
+
+      // 使用 Google 回傳的實際過期時間（預設 3600 秒）
+      const expiresIn = parseInt(response.expires_in) || 3600;
+      saveTokenToStorage(response.access_token, expiresIn);
       window.gapi.client.setToken({ access_token: response.access_token });
       console.log('Token silently refreshed');
       resolve(true);
     };
-    
+
     // 嘗試靜默刷新（不顯示同意畫面）
     tokenClient.requestAccessToken({ prompt: '' });
   });
@@ -148,20 +168,22 @@ export const signIn = () => {
       resolve({ success: false, error: 'Google Identity Services 未初始化' });
       return;
     }
-    
+
     tokenClient.callback = async (response) => {
       if (response.error) {
         console.error('Token error:', response);
         resolve({ success: false, error: response.error_description || response.error });
         return;
       }
-      
-      saveTokenToStorage(response.access_token);
+
+      // 使用 Google 回傳的實際過期時間（預設 3600 秒）
+      const expiresIn = parseInt(response.expires_in) || 3600;
+      saveTokenToStorage(response.access_token, expiresIn);
       window.gapi.client.setToken({ access_token: response.access_token });
-      
+
       resolve({ success: true });
     };
-    
+
     // 請求 access token
     if (accessToken === null || isTokenExpired()) {
       // 首次登入或 token 過期，需要彈出同意畫面

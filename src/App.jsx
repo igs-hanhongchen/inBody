@@ -47,16 +47,21 @@ const App = () => {
   useEffect(() => {
     const init = async () => {
       try {
+        console.log('Initializing Google API...');
         await initGoogleAPI();
         setIsGapiReady(true);
-        
+
         const signedIn = isSignedIn();
+        console.log('Sign-in status:', signedIn);
         setIsUserSignedIn(signedIn);
-        
+
         if (signedIn) {
+          console.log('User is signed in, loading data...');
           const user = await getCurrentUser();
           setCurrentUser(user);
           await loadData();
+        } else {
+          console.log('User is not signed in');
         }
       } catch (err) {
         console.error('Failed to initialize Google API:', err);
@@ -65,7 +70,7 @@ const App = () => {
         setIsLoading(false);
       }
     };
-    
+
     init();
   }, []);
 
@@ -279,10 +284,10 @@ const App = () => {
         )}
 
         {/* Loading State */}
-        {isLoading && isUserSignedIn && (
+        {isLoading && (
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin" />
-            載入數據中...
+            {!isGapiReady ? '正在初始化...' : isUserSignedIn ? '載入數據中...' : '檢查登入狀態...'}
           </div>
         )}
 
@@ -379,7 +384,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/27 17:15</div>
+          <div className="mt-1">最後更新：2026/01/28 14:30</div>
         </div>
       </div>
     </div>
