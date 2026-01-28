@@ -1,3 +1,4 @@
+/* global __BUILD_TIME__ */
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Activity, User, Flame, Calendar, Info, Database, Heart, Clock, PlusCircle, LogIn, LogOut, RefreshCw, Loader2 } from 'lucide-react';
@@ -384,7 +385,7 @@ const App = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <div>數據來源：Google Sheets</div>
-          <div className="mt-1">最後更新：2026/01/28 14:30</div>
+          <div className="mt-1">建置時間：{__BUILD_TIME__}</div>
         </div>
       </div>
     </div>
